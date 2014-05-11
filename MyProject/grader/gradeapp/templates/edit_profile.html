@@ -1,0 +1,448 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="icon" type = "image/png" href = "{% static 'icon.png' %}" />
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>C++ Gradebook</title>
+
+<!-- Table CSS Styles :: 	border-left:1px solid #D8D8D8;FE9A2E;evenodd:F5F6CE !-->
+<style>
+#mytable-style{
+	min-width: 300px;
+	font-family: Tahoma;
+	font-weight:bold;
+	font-size:12px;
+	text-align:left;
+	border-collapse: collapse;
+	border-left:2px solid #F79F81;
+	border-right:2px solid #F79F81;
+	border-bottom:2px solid #F79F81;
+	border-top: 2px solid #F79F81;
+	margin:20px;
+	}
+	
+#mytable-style th{
+	font-size:13px;
+	font-weight:bold;
+	border: 2px solid #F90;
+	background:#FAAC58;
+	color:#39396E;
+	padding:7px;
+	}
+
+#mytable-style td{
+	border-right:1px solid #F79F81;
+	border-bottom:1px solid #F79F81;
+	border-top: 1px solid #F79F81;
+	color:#39396E;
+	padding:7px;	
+	}
+	
+	
+#mytable-style tr:nth-child(odd){
+	background:#FFC;
+}
+#mytable-style tr:nth-child(even){
+	background: #FFC;
+}
+#mytable-style tfoot tr td{
+		background:#F5D0A9;
+		font-size:12px;
+		font-weight:bold;
+		color:#39396E;
+	}
+	
+#mytable-style tbody tr:focus td{
+	background:#d0dafd;
+	color:#339;}
+
+.highlightme {
+	background:#d0dafd;
+	color:#339;}
+
+#submit {
+		font-weight: bold;
+		border: 1px solid white;
+		color: white;
+		background: #3c8acd;
+		font-size: 12px;
+		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif
+}
+
+#submit:hover{
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+.button {
+		font-weight: bold;
+		border: 1px solid white;
+		color: white;
+		background: #3c8acd;
+		font-size: 12px;
+		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif
+}
+
+.button:hover{
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+#tabs {
+  overflow: scroll;
+}
+</style>
+
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	width:100%;
+	height:100%;
+	background: #4E5869;
+	margin: 0;
+	padding: 0;
+	color: #000;
+	background:#FC0;
+	border-color: #FFF;
+}
+
+ul, ol, dl { 
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0px;	 
+	padding-right: 0px;
+	padding-left: 5px; 
+	color: #000;
+	font-family: Tahoma, Geneva, sans-serif;
+	text-align: left;
+	font-weight: bold;
+	font-size: small;
+}
+a img { 
+	border: none;
+}
+
+a:link {
+	color:#414958;
+	text-decoration: underline; 
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { 
+	text-decoration: none;
+}
+
+.container {
+	display:block;
+	overflow:hidden;
+	width: 100%;
+	height: 100%; 
+	background: #FC0;
+	margin: 0; 
+}
+
+
+.header {
+	top:0px;
+	left:0px;
+	height:101px;
+	width:100%;
+	max-width:1900px;
+	background: #6F7D94;
+	background-color: #FFF;
+	background-image: url({% static 'newbg.png' %});
+	border-color: #000;
+	border-bottom-width: thin;
+	border-top-style: none;
+	border-left-style: solid;
+	border-left-width: thin;
+	border-right-style: solid;
+}
+
+.sidebar1 {
+	position:absolute;
+	float: left;
+	width: 150px;
+	left:0px;
+	top:100px;
+	bottom:0px;
+	background: #93A5C4;
+	padding: 0px;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	border-bottom: none;
+	text-align: left;
+	text-indent: 5px;
+}
+
+.news-header{
+	position:absolute;
+	left:151px;
+	float: left;
+	top:101px;
+	bottom:121px;
+	width:screen;
+	max-width:1751px;
+	height:20px;
+	right:0px;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 0px;
+	color: #000;
+	font-weight: normal;
+	text-align: left;
+	font-size: small;
+}
+
+.content {
+	display: inline-table;
+	position:absolute;
+ 	left:151px;
+	top:121px;
+	bottom:0px;
+	right:0px;
+	width: 100%;
+	max-width:1751px;
+	height:100%;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 0px;
+	background-image: url({% static 'bg_yellow.png' %});
+	bottom-padding: 15px;
+	color: #000;
+	font-weight: normal;
+	text-align: left;
+	padding-bottom: 15px;
+	font-size: small;
+	margin-bottom: 4px;
+}
+
+.regfield {
+	float: left;
+	background: #93A5C4;
+	padding-bottom: 10px;
+	background-image: url({% static 'tablebg.jpg' %});
+	background-color: #FC0;
+	border-color: #999;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 10px;
+}
+.newfield {
+	float: left;
+	background: #4E5869;
+	padding-bottom: 10px;
+	background-image: url({% static 'website_bg.jpg' %});
+	background-color: #FC8;
+	border-color: #999;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 10px;
+}
+
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; 
+}
+ul.nav {
+	list-style: none; 	
+	border-top: 1px solid #666; 
+	margin-bottom: 15px; 
+	font-size: small;
+}
+ul.nav li {
+	border-bottom: 1px solid #666; 
+}
+ul.nav a, ul.nav a:visited { 
+	padding: 5px 5px 5px 15px;
+	display: block; 
+	text-decoration: none;
+	background: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { 
+	background: #6F7D94;
+	color: #FFF;
+	background-color: #CC0;
+}
+
+.footer {
+	clear:both;
+	position:fixed;
+	bottom:0;
+	left:0;
+	right:0;
+	height:15px;
+	width: 100%;
+	background: #6F7D94;
+	clear: both; 
+	background-image: url({% static 'newbg.png' %});
+	border-left-color: #000;
+	border-left-style: solid;
+	border-left-width: thin;
+	border-bottom-color: #000;
+	border-bottom-style: solid;
+	border-top-color: #000;
+	border-top-style: solid;
+	border-top-width: thin;
+	color: #FFF;
+}
+
+.fltrt {  
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { 
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { 
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+.container .sidebar1 p {
+	color: #000;
+}
+.container .footer p {
+	color: #FFF;
+}
+.sid2 {
+	font-family: Tahoma, Geneva, sans-serif;
+}
+.container {
+	font-weight: bold;
+}
+.reg_field {
+}
+-->
+</style><!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */
+ul.nav a { zoom: 1; }  
+</style>
+<![endif]--></head>
+<div class='news-header'>{% if update_message %} <h1>{{update_message}} {%else %} <h1>Your information is listed below: </h1>{%endif%}
+</div>
+
+<body background="{% static 'website_bg.jpg' %}">
+<div class="container">
+  <div class="header"><!-- end .header --><img src="{% static 'banner_top.png' %}" width="540" height="101" /></div>
+  <div class="sidebar1">
+    <ul class="nav">
+{% if user.is_authenticated %}
+      <li><strong>General</strong></li>
+      <li><a href=../../index><strong>Homepage</strong></a></li>
+      <li><strong><a href=../../classes>Classes</a></strong></li>      
+      <li><strong><a href=../../profile>Manage Profile</a></strong></li>
+      <li><strong><a href=../../inbox>Inbox</a></strong></li>
+{% for group in user.groups.all %}
+    {% if group.name == 'Teacher' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=../../create_assignment>Create Assignment</a></strong></li>
+      <li><strong><a href=../../create_a_class>Create A Class</a></strong></li>      
+      <li><strong><a href=../../manage_classes>Manage Classes</a></strong></li>      
+      <li><strong><a href=../../approve_student>Manage Students</a></strong></li>
+      <li><strong><a href=../../approve_grader>Manage Graders</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% for group in user.groups.all %}
+    {% if group.name == 'Student' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=../../add_a_class>Add A Class</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% for group in user.groups.all %}
+    {% if group.name == 'Admin' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=../../authenticate>Approve Teachers</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% for group in user.groups.all %}
+    {% if group.name == 'Grader' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=../../add_a_class>Add A Class</a></strong></li>
+    {% endif %}
+{% endfor %}{% endif %}      
+
+
+<li></li><li></li>
+    <p>Thank you for choosing us.<!-- end .sidebar1 --></p>
+  </div>
+  <div class="content">
+
+  
+<table id="mytable-style" summary="add_class_input">
+<th colspan="2">
+Profile Information
+</th>
+	    <tr>
+		<form action= '' method='POST'  >
+	      {% csrf_token %}
+		<tr>
+          <td width="146"><strong>Username:</strong></td>
+		  <td width="268"><label for="Name">{{myuser.username}}</label></td>
+		<input type = 'hidden' name = "update_user" value = {{myuser.username}}> 
+		  </tr>
+		<tr>
+          <td width="146"><strong>Account Type:</strong></td>
+          <td>
+          	{% if myuser.user_type == "TE" %} Teacher
+            {% elif myuser.user_type == "ST" %} Student
+            {% elif myuser.user_type == "GR" %} Grader
+            {% elif myuser.user_type == "AD" %} Administrator
+            {% endif %}            
+          </td>
+		 </tr>
+		<tr>
+          <td width="146"><strong>First Name:</strong></td>
+		  <td width="268"><label for="first_name"></label>
+		  <input type="text" name="first_name" id="first_name" value = "{{myuser.first_name}}"></td>
+		  </tr>
+		<tr>
+          <td width="146"><strong>Last Name:</strong></td>
+		  <td width="268"><label for="last_name"></label>
+		  <input type="text" name="last_name" id="last_name" value = "{{myuser.last_name}}"></td>
+		  </tr>
+		<tr>
+          <td width="146"><strong>E-Mail:</strong></td>
+		  <td width="268"><label for="Name"></label>
+		  <input type="text" name="email" id="email" value = "{{myuser.email}}"></td>
+		  </tr>
+        </tr>
+		<tr>
+          <td colspan="2" bgColor = "#FAAC58"><strong>Class Listing:</strong></td>
+		  </tr>
+		  {% for each_class in classes %}
+          <td width="146">
+		  <strong>{{each_class.class_number}} </td><td><a href="../../classes/{{each_class.class_number}}">{{each_class.class_name}}</a></td></strong></tr>
+		  {% endfor %}
+          <td colspan="2"><input type="submit" name="submit" id="submit" value="Submit Changes" /> </td>
+		  </table>
+	
+    <p>&nbsp;</p>
+  </div>
+  <div class="sidebar2">
+    <p><img src={% static 'tr_notices.png' %} width="50" height="24" /></p>
+    <p>
+		<p><a href="../../log_out">Log Out</a></p>
+    </p>
+  </div>
+  <div class="footer">
+    <p> <a href="../../log_out" style="color: white">Log Out</a></p>
+  <!-- end .footer --></div>
+<!-- end .container --></div></div>
+</body>
+</html>

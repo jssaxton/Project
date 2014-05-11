@@ -1,0 +1,607 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="icon" type = "image/png" href = "{% static 'icon.png' %}" />
+<base href = "http://127.0.0.1:8000/gradeapp/">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>C++ Gradebook</title>
+
+<!-- Table CSS Styles :: 	border-left:1px solid #D8D8D8;FE9A2E;evenodd:F5F6CE !-->
+<style>
+#mytable-style{
+	min-width: 300px;
+	font-family: Tahoma;
+	font-weight:bold;
+	font-size:12px;
+	text-align:left;
+	border-collapse: collapse;
+	border-left:2px solid #F79F81;
+	border-right:2px solid #F79F81;
+	border-bottom:2px solid #F79F81;
+	border-top: 2px solid #F79F81;
+	margin:20px;
+	}
+	
+#mytable-style th{
+	font-size:13px;
+	font-weight:bold;
+	border: 2px solid #F90;
+	background:#FAAC58;
+	color:#39396E;
+	padding:7px;
+	}
+
+#mytable-style td{
+	border-right:1px solid #F79F81;
+	border-bottom:1px solid #F79F81;
+	border-top: 1px solid #F79F81;
+	color:#39396E;
+	padding:7px;	
+	}
+	
+	
+#mytable-style tr:nth-child(odd){
+	background:#FFC;
+}
+#mytable-style tr:nth-child(even){
+	background: #FFC;
+}
+#mytable-style tfoot tr td{
+		background:#F5D0A9;
+		font-size:12px;
+		font-weight:bold;
+		color:#39396E;
+	}
+	
+#mytable-style tbody tr:focus td{
+	background:#d0dafd;
+	color:#339;}
+
+.highlightme {
+	background:#d0dafd;
+	color:#339;}
+
+#submit {
+		font-weight: bold;
+		border: 1px solid white;
+		color: white;
+		background: #3c8acd;
+		font-size: 12px;
+		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif
+}
+
+#submit:hover{
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+.button {
+		font-weight: bold;
+		border: 1px solid white;
+		color: white;
+		background: #3c8acd;
+		font-size: 12px;
+		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif
+}
+
+.button:hover{
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+#tabs {
+  overflow: scroll;
+}
+</style>
+
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	width:100%;
+	height:100%;
+	background: #4E5869;
+	margin: 0;
+	padding: 0;
+	color: #000;
+	background:#FC0;
+	border-color: #FFF;
+}
+
+ul, ol, dl { 
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0px;	 
+	padding-right: 0px;
+	padding-left: 5px; 
+	color: #000;
+	font-family: Tahoma, Geneva, sans-serif;
+	text-align: left;
+	font-weight: bold;
+	font-size: small;
+}
+a img { 
+	border: none;
+}
+
+a:link {
+	color:#414958;
+	text-decoration: underline; 
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { 
+	text-decoration: none;
+}
+
+.container {
+	display:block;
+	overflow:hidden;
+	width: 100%;
+	height: 100%; 
+	background: #FC0;
+	margin: 0; 
+}
+
+
+.header {
+	top:0px;
+	left:0px;
+	height:101px;
+	width:100%;
+	max-width:1900px;
+	background: #6F7D94;
+	background-color: #FFF;
+	background-image: url({% static 'newbg.png' %});
+	border-color: #000;
+	border-bottom-width: thin;
+	border-top-style: none;
+	border-left-style: solid;
+	border-left-width: thin;
+	border-right-style: solid;
+}
+
+.sidebar1 {
+	position:absolute;
+	float: left;
+	width: 150px;
+	left:0px;
+	top:100px;
+	bottom:0px;
+	background: #93A5C4;
+	padding: 0px;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	border-bottom: none;
+	text-align: left;
+	text-indent: 5px;
+}
+
+.news-header{
+	position:absolute;
+	left:151px;
+	float: left;
+	top:101px;
+	bottom:121px;
+	width:screen;
+	max-width:1751px;
+	height:20px;
+	right:0px;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 0px;
+	color: #000;
+	font-weight: normal;
+	text-align: left;
+	font-size: small;
+}
+
+.content {
+	display: inline-table;
+	position:absolute;
+ 	left:151px;
+	top:121px;
+	bottom:0px;
+	right:0px;
+	width: 100%;
+	max-width:1751px;
+	height:100%;
+	background-color: #FC0;
+	border-color: #000;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 0px;
+	background-image: url({% static 'bg_yellow.png' %});
+	bottom-padding: 15px;
+	color: #000;
+	font-weight: normal;
+	text-align: left;
+	padding-bottom: 15px;
+	font-size: small;
+	margin-bottom: 4px;
+}
+
+.regfield {
+	float: left;
+	background: #93A5C4;
+	padding-bottom: 10px;
+	background-image: url({% static 'tablebg.jpg' %});
+	background-color: #FC0;
+	border-color: #999;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 10px;
+}
+.newfield {
+	float: left;
+	background: #4E5869;
+	padding-bottom: 10px;
+	background-image: url({% static 'website_bg.jpg' %});
+	background-color: #FC8;
+	border-color: #999;
+	border-style: solid;
+	border-width: thin;
+	margin-left: 10px;
+}
+
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; 
+}
+ul.nav {
+	list-style: none; 	
+	border-top: 1px solid #666; 
+	margin-bottom: 15px; 
+	font-size: small;
+}
+ul.nav li {
+	border-bottom: 1px solid #666; 
+}
+ul.nav a, ul.nav a:visited { 
+	padding: 5px 5px 5px 15px;
+	display: block; 
+	text-decoration: none;
+	background: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { 
+	background: #6F7D94;
+	color: #FFF;
+	background-color: #CC0;
+}
+
+.footer {
+	clear:both;
+	position:fixed;
+	bottom:0;
+	left:0;
+	right:0;
+	height:15px;
+	width: 100%;
+	background: #6F7D94;
+	clear: both; 
+	background-image: url({% static 'newbg.png' %});
+	border-left-color: #000;
+	border-left-style: solid;
+	border-left-width: thin;
+	border-bottom-color: #000;
+	border-bottom-style: solid;
+	border-top-color: #000;
+	border-top-style: solid;
+	border-top-width: thin;
+	color: #FFF;
+}
+
+.fltrt {  
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { 
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { 
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+.container .sidebar1 p {
+	color: #000;
+}
+.container .footer p {
+	color: #FFF;
+}
+.sid2 {
+	font-family: Tahoma, Geneva, sans-serif;
+}
+.container {
+	font-weight: bold;
+}
+.reg_field {
+}
+-->
+</style><!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */
+ul.nav a { zoom: 1; }  
+</style>
+<![endif]--></head>
+<div class='news-header'><h1>{{comment}}</h1>
+</div>
+<body background="{% static 'website_bg.jpg' %}">
+<div class="container">
+  <div class="header"><!-- end .header --><img src="{% static 'banner_top.png' %}" width="540" height="101" /></div>
+  <div class="sidebar1">
+    <ul class="nav">
+{% if user.is_authenticated %}
+      <li><strong>General</strong></li>
+      <li><a href=index><strong>Homepage</strong></a></li>
+      <li><strong><a href=classes>Classes</a></strong></li>      
+      <li><strong><a href=profile>Manage Profile</a></strong></li>
+      <li><strong><a href=inbox>Inbox</a></strong></li>
+{% for group in user.groups.all %}
+    {% if group.name == 'Teacher' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=create_assignment>Create Assignment</a></strong></li>
+      <li><strong><a href=create_a_class>Create A Class</a></strong></li>      
+      <li><strong><a href=manage_classes>Manage Classes</a></strong></li>      
+      <li><strong><a href=approve_student>Manage Students</a></strong></li>
+      <li><strong><a href=approve_grader>Manage Graders</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% for group in user.groups.all %}
+    {% if group.name == 'Student' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=add_a_class>Add A Class</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% for group in user.groups.all %}
+    {% if group.name == 'Admin' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=authenticate>Approve Teachers</a></strong></li>
+    {% endif %}
+{% endfor %}
+{% endif %}      
+{% for group in user.groups.all %}
+    {% if group.name == 'Grader' %}
+      <li><strong>Classroom</strong></li>
+      <li><strong><a href=add_a_class>Add A Class</a></strong></li>
+    {% endif %}
+{% endfor %}
+<li></li><li></li>
+    <p>Thank you for choosing us.<!-- end .sidebar1 --></p>
+  </div>
+  <div class="content">
+
+	<h1>{{update_message}}</h1>
+	<table id="mytable-style"width="500" border="1" cellpadding="1" cellspacing="1" class="regfield">
+	<th colspan = "2">
+	Assignment Information
+	</th>
+	{% if myassignment.is_owner or owner %}
+		<form name="student_select" method="POST" action="">          
+	      {% csrf_token %}
+	    <tr>
+		<td width ="150"><strong>For Student:</strong></td>
+			<td width ="300"><select name = "pass_class">
+			{% for each_assignment in all_assignments%}
+					{% if each_assignment.to_student.username ==  each_assignment.to_teacher.username %}
+							{% if each_assignment.to_student == myuser %}
+								<option selected = "selected" value= {{each_assignment.to_student.username}}>All Students</option>
+							{%else%}
+								<option value= {{each_assignment.to_student.username}}>All Students</option>
+							{% endif %}
+						{% else %}	
+							{% if each_assignment.to_student == myuser %}
+								<option selected = "selected" value= {{each_assignment.to_student.username}}>{{each_assignment.to_student.first_name}} {{each_assignment.to_student.last_name}}</option>
+							{%else%}
+								<option value= {{each_assignment.to_student.username}}>{{each_assignment.to_student.first_name}} {{each_assignment.to_student.last_name}}</option>
+							{% endif %}
+						{% endif %}
+			{% endfor %}
+		</select> <input type="submit" value="Update" class = "button"></form></td>
+		<form action= '' method='POST'  >
+	      {% csrf_token %}
+		<input type = 'hidden' name = "update_user" value = {{myuser.username}}> 
+		<tr>
+          <td width="150"><strong>Assignment:</strong></td>
+          {% if myuser.username == user.username %}
+		  <td width="300"><label for="Assignment Name"></label>
+		  <input type="text" name="asg_name" id="asg_name" value = "{{myassignment.assignment_name}}"></td>
+			{% else %}
+			 <td width="300">{{myassignment.assignment_name}}</td>
+			{% endif%}
+		  </tr>
+        </tr>
+        <tr>
+          <td width="150"><strong>Class:</strong></td>
+          <td width="300">{{myassignment.to_class.class_number}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Your Score:</strong></td>
+          <td width="300"><label for ="My Score"></label>
+          <input type="text" name="asg_score" id="asg_score" value = "{{myassignment.real_score}}"></td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Total Score:</strong></td>
+		  <td width="300"><label for="Total Score"></label>
+          <input type="text" name="asg_max_score" id="asg_max_score" value = "{{myassignment.max_score}}"></td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Date Assigned:</strong></td>
+          <td width="300">{{myassignment.assign_date}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Date Due:</strong></td>
+		  <td width="300"><label for="Due Date"></label>
+          <input type="datefield" name="due_date" id="due_date" value = "{{myassignment.due_date}}"></td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Retry Limit:</strong></td>
+ 		  <td width="300"><label for="Retry Limit"></label>
+          <input type="retry_limit" name="retry_limit" id="retry_limit" value = "{{myassignment.retry_limit}}"></td>
+        </tr>
+        <tr>
+          <td><strong>Max Runtime:</strong></td>
+          <td><label for="run_time"></label>
+            <input type="number" name="run_time" id="run_time" " value = "{{myassignment.run_time}}"></td>
+        </tr>
+        <tr>
+
+        <tr ><td colspan=2 ><input class = "button" type="submit" name="Submit" id="Submit" value="Submit Changes" /> 
+        </td></tr>
+</form>
+{% if myassignment.to_student.username == user.username %}
+<th colspan=2><strong>Gradefile:</strong></th>
+		  {% if myfile %}
+				<tr><td>
+
+<a href="{{ MEDIA_URL}}{{ myfile.my_file }}">View</a>
+	<form action= '' method='POST'  >{% csrf_token %}
+	<input type = 'hidden' name = "del_me" value = {{myfile.my_file.name}}> 
+</td><td>	<input type="submit" class = "button" value="Delete">
+	</form>
+	{% else %}
+	<form action= "upload_file/{{myassignment.id}}/" enctype="multipart/form-data" method='POST'  >
+	{% csrf_token %}
+	<input type = 'hidden' name = "assignment_id" value = {{myassignment.id}}> 
+	<tr>
+
+	<td width ="150"><input id = "datafile" type="file" name="datafile"></td>
+	<td width ="300"><input type="submit" class = "button" value="Upload"></td>
+	</tr></form>		  {% endif %}{% endif %}
+		  </td>
+        </tr>
+	{% else %}
+        <tr>
+          <td width="150"><strong>Assignment:</strong></td>
+          <td width="300">{{myassignment.assignment_name}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Class:</strong></td>
+          <td width="300">{{myassignment.to_class.class_number}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Your Score:</strong></td>
+          <td width="300">{{myassignment.real_score}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Total Score:</strong></td>
+          <td width="300">{{myassignment.max_score}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Date Assigned:</strong></td>
+          <td width="300">{{myassignment.assign_date}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Date Due:</strong></td>
+          <td width="300">{{myassignment.due_date}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Retry Limit:</strong></td>
+          <td width="300">{{myassignment.retry_limit}}</td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Uploaded Status:</strong></td>
+          <td width="300">
+		  {% if myassignment.already_uploaded %}
+				<h>Uploaded</h>
+		  {% else %}
+				<h>Not Uploaded</h>
+		  {% endif %}
+		  </td>
+        </tr>
+        <tr>
+          <td width="150"><strong>Grade Status:</strong></td>
+          <td width="300">
+		  {% if myassignment.already_graded %}
+				<h>Graded</h>
+		  {% else %}
+				<h>Not Graded</h>
+		  {% endif %}
+		  </td>
+        </tr>
+	{%endif%}
+{% for group in user.groups.all %}
+    {% if group.name == 'Student' %}
+	<form action= "upload_file/{{myassignment.id}}/" enctype="multipart/form-data" method='POST'  >
+	{% csrf_token %}
+	<input type = 'hidden' name = "assignment_id" value = {{myassignment.id}}> 
+	<tr>
+	<td width ="150"><input id = "datafile" type="file" name="datafile"></td>
+	<td width ="300"><input class = "button" type="submit" value="Upload"></td>
+	</tr>
+	{% endif %}
+{% endfor %}
+{% if not myassignment.to_student.user_type == 'TE' %}
+	<th colspan = 2>Upload History</th>
+	{% for file in files %}
+		{% if file.to_assignment == myassignment %}
+		<tr>
+		<td width ="150">Attempt: {{file.upload_number}} [Score: {{file.attempt_score}}]</td>
+		<td width ="300"><a href = "file/{{file.my_file.name}}">Uploaded a file on {{file.date_uploaded}}</a>
+
+		{% for code in glist %}
+			{% if code.retry == file.upload_number %}
+			 <b><a href = "../../{{code.data_file}}">{{code}}</a>	{{file.retry}}	
+			{% endif %}
+		{% endfor %}
+
+
+		</td>
+
+		</tr>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+{% if myassignment.to_student.user_type == 'TE' %}
+<th colspan = 2> Assignment Deletion</th>
+<tr><td width = 400> Click here to remove this assignment. You will not be able to retrieve this assignment from the database at a later point. </td><td>	<form action= '' method='POST'  >{% csrf_token %}
+	<input type = 'hidden' name = "del_me" value = {{myfile.my_file.name}}> 
+<input type="submit" class = "button" value="Delete"></td>
+	</form>
+</tr>
+{% endif %}
+	</table>
+	</form>
+    <p>&nbsp;</p>
+
+	
+	</div>  
+  
+  </div>
+  
+  <div class="footer">
+    <p> <a href="log_out" style="color: white">Log Out</a></p>
+  <!-- end .footer --></div>
+<!-- end .container --></div></div>
+</body>
+</html>
+
+<script>
+//get the input and UL list
+var input = document.getElementById('filesToUpload');
+var list = document.getElementById('fileList');
+
+//empty list for now...
+while (list.hasChildNodes()) {
+	list.removeChild(ul.firstChild);
+}
+
+//for every file...
+for (var x = 0; x < input.files.length; x++) {
+	//add to list
+	var li = document.createElement('li');
+	li.innerHTML = 'File ' + (x + 1) + ':  ' + input.files[x].name;
+	list.append(li);
+}
+</script>
